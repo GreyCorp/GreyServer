@@ -9,16 +9,15 @@ import motor
 from tornado.ioloop import IOLoop
 from bson.objectid import ObjectId
 
-from grey.db import db, user_db
-from grey.tests.utils.motor import greyAsyncTest
+from grey.db import mongodb, user_db
+from grey.tests.utils.mongo import GreyAsyncTest
 
-@patch("grey.db.user_db.user_db", db.mongodb.test_user_db)
-class DBTest(greyAsyncTest):
+class DBTest(GreyAsyncTest):
     def test_db(self):
-        self.assertIsInstance(db.mongodb, motor.MotorDatabase)
+        self.assertIsInstance(mongodb, motor.MotorDatabase)
 
     def test_user_db(self):
-        self.assertIsInstance(user_db.user_db, motor.MotorCollection)
+        self.assertIsInstance(mongodb.user_db, motor.MotorCollection)
 
     def test_find_user_id(self):
         @self.callback
