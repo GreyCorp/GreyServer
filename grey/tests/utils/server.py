@@ -14,8 +14,11 @@ logging.getLogger("tornado.access").addHandler(logging.NullHandler())
 
 def post(port, route, data):
     result = requests.post("http://localhost:%d/%s" % (port, route),
-        data = json.dumps(data)).text
-    return json.loads(result)
+                            data = json.dumps(data)).text
+    try:
+        return json.loads(result)
+    except ValueError as e:
+        raise ValueError(result)
 
 def get(port, route):
     result = requests.get("http://localhost:%d/%s" % (port, route)).text

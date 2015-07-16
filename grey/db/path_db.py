@@ -1,12 +1,10 @@
 """
 Grey User database handler
 """
-from grey.db.db import mongodb
-
-path_db = mongodb.path_db
+from grey.db import mongodb
 
 def create_path(creatorId, name, callback):
-    path_db.save({
+    mongodb.path_db.save({
         'creatorId': creatorId,
         'name': name
     }, callback = callback)

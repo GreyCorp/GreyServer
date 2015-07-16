@@ -5,7 +5,9 @@ import unittest
 
 from tornado.ioloop import IOLoop
 
-class greyAsyncTest(unittest.TestCase):
+from grey.tests.utils import GreyTest
+
+class GreyAsyncTest(GreyTest):
     # Ensure IOLoop stops to prevent blocking tests
     def callback(self, func):
         def wrapper(*args, **kwargs):
@@ -21,8 +23,8 @@ class greyAsyncTest(unittest.TestCase):
 
     def setUp(self):
         self.error = None
-        super(greyAsyncTest, self).setUp()
+        super(GreyAsyncTest, self).setUp()
 
     def tearDown(self):
         if self.error:   self.fail(str(self.error))
-        super(greyAsyncTest, self).tearDown()
+        super(GreyAsyncTest, self).tearDown()
