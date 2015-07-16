@@ -1,17 +1,19 @@
 """
-grey Request/Response Utils
+Grey Request/Response Utils
 """
 import json, urlparse
 
-from grey.error import MissingField, InvalidJSON
+from grey.error import MissingField, InvalidJSON, MongoError, GreyError
 
 def mongo_callback(req):
     def decorator(func):
         def wrapper(result, error):
-            if error:
-                req.respond("Mongo Error " + error, code = 500)
-                return
-            func(result)
+            try:
+                if error:
+                    raise MongoError(error)
+                func(result)
+            except GreyError as e:
+                req.respond(e.message, e.code)
         return wrapper
     return decorator
 
@@ -20,13 +22,13 @@ def unpack(arguments = []):
     Unpack arguments to be used in methods wrapped
     """
     def decorator(func):
-        def wrapper(_self, data):
+        def wrapper(_self, data, **kwargs):
             data = smart_parse(data)
             try:
                 args = [data[item] for item in arguments]
             except KeyError:
                 raise MissingField(item)
-            func(_self, *args)
+            func(_self, *args, **kwargs)
         return wrapper
     return decorator
 

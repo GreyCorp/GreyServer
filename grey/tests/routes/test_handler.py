@@ -5,6 +5,7 @@ Routes > Handler
 import unittest
 
 from mock import patch
+import tornado.web
 
 from grey.routes.handler import GreyHandler, JSONEncoder
 from grey.tests.utils.server import server, post
@@ -15,7 +16,7 @@ from grey.error import InvalidJSON
 def example(self, data):
     self.respond(data)
 
-def bad(x):
+def bad(*args, **kwargs):
     raise InvalidJSON
 
 @patch("grey.routes.utils.smart_parse", bad)

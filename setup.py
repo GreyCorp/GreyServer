@@ -1,5 +1,5 @@
 """
-greyServer setup
+GreyServer setup
 For development:
     `python setup.py develop`
 """

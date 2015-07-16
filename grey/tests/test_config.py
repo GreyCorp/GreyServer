@@ -1,6 +1,6 @@
 """
-grey Test Suite
-grey > config
+Grey Test Suite
+Grey > config
 """
 import unittest, re
 

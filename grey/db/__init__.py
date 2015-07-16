@@ -5,5 +5,4 @@ import motor
 
 from grey.config import MONGODB
 
-client = motor.MotorClient(MONGODB)
-mongodb = client.grey
+mongodb = motor.MotorClient(MONGODB).grey
