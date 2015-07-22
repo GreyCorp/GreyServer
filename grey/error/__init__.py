@@ -27,3 +27,17 @@ class InvalidJSON(GreyError):
             "No JSON object could be decoded.",
             400
         )
+
+class AuthError(GreyError):
+    def __init__(self):
+        GreyError.__init__(self,
+            "User not authenticated",
+            401
+        )
+
+class MongoError(GreyError):
+    def __init__(self, message):
+        GreyError.__init__(self,
+            message,
+            500
+        )

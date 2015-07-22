@@ -12,9 +12,9 @@ from tornado.ioloop import IOLoop
 logging.getLogger("tornado.access").propagate = False
 logging.getLogger("tornado.access").addHandler(logging.NullHandler())
 
-def post(port, route, data):
+def post(port, route, data, headers={}):
     result = requests.post("http://localhost:%d/%s" % (port, route),
-                            data = json.dumps(data)).text
+                            data = json.dumps(data), headers=headers).text
     try:
         return json.loads(result)
     except ValueError as e:

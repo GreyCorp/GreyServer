@@ -1,5 +1,5 @@
 """
-grey Test Suite
+Grey Test Suite
 Db
 """
 import unittest, time
@@ -9,15 +9,15 @@ import motor
 from tornado.ioloop import IOLoop
 from bson.objectid import ObjectId
 
-from grey.db import mongodb, user_db
+from grey.db import mongodb, auth_db
 from grey.tests.utils.mongo import GreyAsyncTest
 
 class DBTest(GreyAsyncTest):
     def test_db(self):
         self.assertIsInstance(mongodb, motor.MotorDatabase)
 
-    def test_user_db(self):
-        self.assertIsInstance(mongodb.user_db, motor.MotorCollection)
+    def test_auth_db(self):
+        self.assertIsInstance(mongodb.auth_db, motor.MotorCollection)
 
     def test_find_user_id(self):
         @self.callback
@@ -26,7 +26,7 @@ class DBTest(GreyAsyncTest):
             self.assertIs(result, None)
 
         hashed = "distincthash1"
-        user_db.find_user_id(hashed, callback)
+        auth_db.find_user_id(hashed, callback)
         self.wait()
 
     def test_create_user(self):
@@ -38,7 +38,7 @@ class DBTest(GreyAsyncTest):
         def callback(result, error):
             self.assertIs(error, None)
             self.assertIsInstance(result, ObjectId)
-        user_db.create_user(phone, hashed, callback)
+        auth_db.create_user(phone, hashed, callback)
         self.wait()
 
         # Check if created
@@ -46,7 +46,7 @@ class DBTest(GreyAsyncTest):
         def check_created(result, error):
             self.assertIs(error, None)
             self.assertEqual(result["phone"], phone)
-        user_db.find_user_id(hashed, check_created)
+        auth_db.find_user_id(hashed, check_created)
         self.wait()
 
     def test_bad_calls(self):
@@ -55,7 +55,7 @@ class DBTest(GreyAsyncTest):
             self.assertIs(result, None)
             self.assertIsNot(error, None)
         random_object = object()
-        user_db.find_user_id(random_object, error_callback)
+        auth_db.find_user_id(random_object, error_callback)
         self.wait()
 
 if __name__ == "__main__":

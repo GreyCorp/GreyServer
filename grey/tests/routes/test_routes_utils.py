@@ -33,7 +33,7 @@ class RoutesUtilsTest(unittest.TestCase):
     def test_mongo_callback_error(self):
         error, result = "Shit went awry", None
         mongo_callback_example(result, error)
-        self.assertEqual(req_handler.data, "Mongo Error " + error)
+        self.assertEqual(req_handler.data, error)
         self.assertEqual(req_handler.code, 500)
 
     def test_unpack_success(self):

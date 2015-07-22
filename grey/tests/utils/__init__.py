@@ -3,16 +3,20 @@ Grey General Test
 """
 import unittest, os
 
+from mock import patch
+import motor
+
+from grey.config import MONGODB
 import grey.db
 
-DIR = os.path.dirname(grey.db.__file__)
-collection_names = [
-    name.split(".")[0] for name in os.listdir(DIR)
-    if ".py" == name[-3:]
-]
-
 class GreyTest(unittest.TestCase):
+    port = 7000
+    
+    def setUp(self):
+        super(GreyTest, self).setUp()
+        self.client = motor.MotorClient(MONGODB)
+        grey.db.mongodb = self.client.testing
+
     def tearDown(self):
-        for name in collection_names:
-             grey.db.mongodb.drop_collection(name)
         super(GreyTest, self).tearDown()
+        self.client.drop_database("testing")

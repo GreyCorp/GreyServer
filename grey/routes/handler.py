@@ -1,5 +1,5 @@
 """
-grey Request Handler
+Grey Request Handler
 """
 import json
 from bson.objectid import ObjectId
@@ -20,21 +20,20 @@ class GreyHandler(tornado.web.RequestHandler):
     def post(self, action):
         try:
             # Fetch appropriate handler
-            handler = getattr(self, str(action))
+            if not hasattr(self, str(action)):
+                raise RouteNotFound(action)
 
             # Pass along the data and get a result
+            handler = getattr(self, str(action))
             handler(self.request.body)
-        except AttributeError:
-            e = RouteNotFound(action)
-            self.respond(e.message, e.code)
         except GreyError as e:
             self.respond(e.message, e.code)
 
-
     def respond(self, data, code=200):
-        self.set_status(code)
-        self.write(JSONEncoder().encode({
-            "status": code,
-            "data": data
-        }))
-        self.finish()
+        if not self._finished:
+            self.set_status(code)
+            self.write(JSONEncoder().encode({
+                "status": code,
+                "data": data
+            }))
+            self.finish()

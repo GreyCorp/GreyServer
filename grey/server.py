@@ -3,12 +3,12 @@ import tornado.web
 
 import grey.config as CONFIG
 from grey.routes.auth import AuthRoute
-from grey.routes.path import PathRoute
+from grey.routes.user import UserRoute
 
 def main(debug = True, port = CONFIG.PORT):
     application = tornado.web.Application([
         AuthRoute,
-        PathRoute
+        UserRoute
     ], debug = debug
      , autoreload = debug)
 
